@@ -1,3 +1,8 @@
+/**
+ * Laufzeit maybe : O(n) = n^3
+ */
+
+
 package org.example;
 
 import java.util.*;
@@ -15,68 +20,68 @@ public class Dijkstra {
 
     public void initialize(){
         for (int i = 0; i < n; i++) {
-            graphArray[i] = new ArrayList<Integer>();
+            graphArray[i] = new ArrayList<>();
         }
         for (int i = 0; i < n; i++) {
             visited[i] = false;
         }
-    }
+    } // I MOG NIMMA HOLTS MI HIA RAUS HUIFE
 
     public void setMaxInt(ArrayList<Integer>[] graph) {
-        for (int i = 0; i < graph.length; i++) {
+        for (ArrayList<Integer> integers : graph) {
             for (int j = 0; j < graph.length; j++) {
-                if (graph[i].get(j) == 0) {
-                    graph[i].set(j, Integer.MAX_VALUE);
+                if (integers.get(j) == 0) {
+                    integers.set(j, Integer.MAX_VALUE);
                 }
             }
         }
     }
 
-    public void dijkstra(ArrayList<Integer>[] graph, int currentNode, Boolean[] visited) {
+    public void dijkstra(int start) {
         int nextNode;
         // Current node is marked as visited
-        visited[currentNode] = true;
-        for (int i = 0; i < graph.length; i++) {
+        visited[start] = true;
+        visitedNodes.add(start);
+        for (int i = 0; i < graphArray.length-1; i++) {
             // Searching for next node
-            nextNode = getNextVertex(graph, visited, currentNode);
+            nextNode = getNextVertex();
             // Marking next node as visited
             if(nextNode != -1) visited[nextNode] = true;
             // Add next node to path of nodes
-            visitedNodes.add(currentNode);
-            // Repeat process with next node
-            currentNode = nextNode;
+            if(!visitedNodes.contains(nextNode)) visitedNodes.add(nextNode);
+
         }
 
     }
 
 
-    public int getNextVertex(ArrayList<Integer>[] graph, Boolean[] visited, int currentNode) {
-        int curWeight = 0, nextWeight, bestNode = currentNode, bestWeight = Integer.MAX_VALUE;
-        for (int curNode = 0; curNode < graph.length - 1; curNode++) {
-            curWeight = graph[currentNode].get(curNode); // current weight
-            nextWeight = graph[currentNode].get(curNode + 1); // next weight
-            // Check if next weight is less than current weight and if it isn´t already visited
-            if ((nextWeight < curWeight) && (nextWeight < bestWeight)  && !visited[curNode+1]) {
-                // best node is the next node
-                bestNode = curNode + 1;
-                bestWeight = nextWeight;
+    public int getNextVertex() {
+        int curWeight, bestNode = -1, bestWeight = Integer.MAX_VALUE;
+        for (int i = 0; i < visitedNodes.toArray().length; i++){
+            for (int curNode = 0; curNode < graphArray.length; curNode++) {
+                curWeight = graphArray[visitedNodes.get(i)].get(curNode); // current weight
+                // Check if current weight is less than best weight and if it isn´t already visited
+                if ((curWeight < bestWeight)  && !visited[curNode]) {
+                    // best node is the current node
+                    bestNode = curNode;
+                    bestWeight = curWeight;
 
+                }
             }
         }
-
         // the current node is the penultimate node
-        if(bestNode == currentNode){
+        /*if(bestNode == currentNode){
             // TODO: Was passiert, wenn letzter nicht besuchter Knoten keine Verbindung zum derzeitigen Knoten hat?
             int indexOfLastNode = java.util.Arrays.asList(visited).indexOf(Boolean.FALSE);
             // adding node value to length
-            if(indexOfLastNode != -1) wayLength += graph[currentNode].get(indexOfLastNode);
+            if(indexOfLastNode != -1) wayLength += graphArray[currentNode].get(indexOfLastNode);
             // find the node which isn´t already visited
             return indexOfLastNode;
-        } else{
+        } else{*/
             // adding node value to length
             wayLength += bestWeight;
             return bestNode;
-        }
+        //}
     }
 
     public void start(Dijkstra d) {
@@ -201,11 +206,11 @@ public class Dijkstra {
         // Replace all zeros with MAX_INT
         d.setMaxInt(graphArray);
         // Start Dijkstra Algorithm
-        d.dijkstra(graphArray, 0, visited);
+        d.dijkstra( 0);
 
         System.out.print("Reihenfolge der Häuser ist ");
-        for (int i = 0; i < visitedNodes.size(); i++) {
-            System.out.print(visitedNodes.get(i));
+        for (Integer visitedNode : visitedNodes) {
+            System.out.print(visitedNode);
         }
         System.out.printf("%n Length of visited nodes %d%n",  wayLength);
 
