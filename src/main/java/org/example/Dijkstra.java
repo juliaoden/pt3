@@ -4,7 +4,9 @@ import java.util.*;
 
 public class Dijkstra {
 
-    static int n = 4; // Number of nodes
+    static int n = 10; // Number of nodes
+
+    static int wayLength = 0;
 
     static ArrayList<Integer> visitedNodes = new ArrayList(); // Serie of nodes
 
@@ -22,7 +24,7 @@ public class Dijkstra {
 
     public void setMaxInt(ArrayList<Integer>[] graph) {
         for (int i = 0; i < graph.length; i++) {
-            for (int j = 0; j < graph.length - 1; j++) {
+            for (int j = 0; j < graph.length; j++) {
                 if (graph[i].get(j) == 0) {
                     graph[i].set(j, Integer.MAX_VALUE);
                 }
@@ -49,28 +51,33 @@ public class Dijkstra {
 
 
     public int getNextVertex(ArrayList<Integer>[] graph, Boolean[] visited, int currentNode) {
-        int curWeight, nextWeight, x, bestNode = currentNode;
-        for (int j = 0; j < graph.length - 1; j++) {
-            curWeight = graph[currentNode].get(j); // current weight
-            nextWeight = graph[currentNode].get(j + 1); // next weight
+        int curWeight = 0, nextWeight, bestNode = currentNode, bestWeight = Integer.MAX_VALUE;
+        for (int curNode = 0; curNode < graph.length - 1; curNode++) {
+            curWeight = graph[currentNode].get(curNode); // current weight
+            nextWeight = graph[currentNode].get(curNode + 1); // next weight
             // Check if next weight is less than current weight and if it isn´t already visited
-            if ((nextWeight < curWeight) && (nextWeight != 0) && !visited[j]) {
+            if ((nextWeight < curWeight) && (nextWeight < bestWeight)  && !visited[curNode+1]) {
                 // best node is the next node
-                bestNode = j + 1;
+                bestNode = curNode + 1;
+                bestWeight = nextWeight;
+
             }
         }
 
         // the current node is the penultimate node
         if(bestNode == currentNode){
+            // TODO: Was passiert, wenn letzter nicht besuchter Knoten keine Verbindung zum derzeitigen Knoten hat?
+            int indexOfLastNode = java.util.Arrays.asList(visited).indexOf(Boolean.FALSE);
+            // adding node value to length
+            if(indexOfLastNode != -1) wayLength += graph[currentNode].get(indexOfLastNode);
             // find the node which isn´t already visited
-            // TODO: Was passiert, wenn letzter nicht besuchter Knoten keine Verbundung zum derzeitigen Knoten hat?
-            return java.util.Arrays.asList(visited).indexOf(Boolean.FALSE);
+            return indexOfLastNode;
         } else{
+            // adding node value to length
+            wayLength += bestWeight;
             return bestNode;
         }
-
     }
-
 
     public void start(Dijkstra d) {
 
@@ -78,22 +85,117 @@ public class Dijkstra {
         d.initialize();
 
         // TODO: Vom Nutzenden eingeben lassen
+        //
         graphArray[0].add(0);
+        graphArray[0].add(4);
         graphArray[0].add(3);
-        graphArray[0].add(2);
-        graphArray[0].add(1);
-        graphArray[1].add(3);
-        graphArray[1].add(0);
+        graphArray[0].add(0);
+        graphArray[0].add(0);
+        graphArray[0].add(0);
+        graphArray[0].add(0);
+        graphArray[0].add(5);
+        graphArray[0].add(0);
+        graphArray[0].add(0);
+        //
         graphArray[1].add(4);
         graphArray[1].add(0);
-        graphArray[2].add(2);
+        graphArray[1].add(5);
+        graphArray[1].add(2);
+        graphArray[1].add(4);
+        graphArray[1].add(0);
+        graphArray[1].add(0);
+        graphArray[1].add(0);
+        graphArray[1].add(0);
+        graphArray[1].add(0);
+        //
+        graphArray[2].add(3);
+        graphArray[2].add(5);
+        graphArray[2].add(0);
+        graphArray[2].add(0);
         graphArray[2].add(4);
         graphArray[2].add(0);
-        graphArray[2].add(7);
-        graphArray[3].add(1);
+        graphArray[2].add(3);
+        graphArray[2].add(3);
+        graphArray[2].add(0);
+        graphArray[2].add(0);
+        //
         graphArray[3].add(0);
-        graphArray[3].add(7);
+        graphArray[3].add(2);
         graphArray[3].add(0);
+        graphArray[3].add(0);
+        graphArray[3].add(3);
+        graphArray[3].add(3);
+        graphArray[3].add(0);
+        graphArray[3].add(0);
+        graphArray[3].add(0);
+        graphArray[3].add(0);
+        //
+        graphArray[4].add(0);
+        graphArray[4].add(4);
+        graphArray[4].add(4);
+        graphArray[4].add(3);
+        graphArray[4].add(0);
+        graphArray[4].add(2);
+        graphArray[4].add(4);
+        graphArray[4].add(0);
+        graphArray[4].add(0);
+        graphArray[4].add(0);
+        //
+        graphArray[5].add(0);
+        graphArray[5].add(0);
+        graphArray[5].add(0);
+        graphArray[5].add(3);
+        graphArray[5].add(2);
+        graphArray[5].add(0);
+        graphArray[5].add(3);
+        graphArray[5].add(0);
+        graphArray[5].add(0);
+        graphArray[5].add(4);
+        //
+        graphArray[7].add(0);
+        graphArray[7].add(0);
+        graphArray[7].add(3);
+        graphArray[7].add(0);
+        graphArray[7].add(4);
+        graphArray[7].add(3);
+        graphArray[7].add(0);
+        graphArray[7].add(2);
+        graphArray[7].add(0);
+        graphArray[7].add(3);
+        //
+        graphArray[6].add(5);
+        graphArray[6].add(0);
+        graphArray[6].add(3);
+        graphArray[6].add(0);
+        graphArray[6].add(0);
+        graphArray[6].add(0);
+        graphArray[6].add(2);
+        graphArray[6].add(0);
+        graphArray[6].add(3);
+        graphArray[6].add(4);
+        //
+        graphArray[8].add(0);
+        graphArray[8].add(0);
+        graphArray[8].add(0);
+        graphArray[8].add(0);
+        graphArray[8].add(0);
+        graphArray[8].add(0);
+        graphArray[8].add(0);
+        graphArray[8].add(3);
+        graphArray[8].add(0);
+        graphArray[8].add(2);
+        //
+        graphArray[9].add(0);
+        graphArray[9].add(0);
+        graphArray[9].add(0);
+        graphArray[9].add(0);
+        graphArray[9].add(0);
+        graphArray[9].add(4);
+        graphArray[9].add(3);
+        graphArray[9].add(4);
+        graphArray[9].add(2);
+        graphArray[9].add(0);
+
 
 
         // Replace all zeros with MAX_INT
@@ -105,6 +207,7 @@ public class Dijkstra {
         for (int i = 0; i < visitedNodes.size(); i++) {
             System.out.print(visitedNodes.get(i));
         }
+        System.out.printf("%n Length of visited nodes %d%n",  wayLength);
 
     }
 
