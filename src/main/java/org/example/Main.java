@@ -1,9 +1,35 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
+
+    /**
+     * Method for getting the adjacency matrix from the user
+     * @return adjacency matrix as ArrayList<Integer>[]
+     */
+    public static ArrayList<Integer>[] getMatrix(int numberNodes){
+         // Adjacency matrix
+        Scanner input = new Scanner(System.in);
+        System.out.println("Geben Sie Adjazenzmatrix ein");
+        int[] array = new int[numberNodes];
+        ArrayList<Integer>[] graphArray = new ArrayList[numberNodes];
+        for (int i = 0; i < numberNodes; i++) {
+            graphArray[i] = new ArrayList<>();
+        }
+        for(int i=0; i<numberNodes; i++) {
+            for (int j = 0; j < numberNodes; j++){
+                array[j] = input.nextInt();
+            }
+            for (int j = 0; j < array.length; j++){
+                graphArray[i].add(array[j]);
+            }
+        }
+
+        return graphArray;
+    }
     public static void main(String[] args) {
 
 
@@ -21,20 +47,17 @@ public class Main {
         );
          int problem = input.nextInt();
 
-        // System.out.println("Geben Sie den Grpahen in folgendem Schame ein: 0,0,0,;0,0,0");
+        System.out.println("Wie viele Knoten hat der Graph?");
+        int numNodes = input.nextInt();
 
-        int[] array = new int[5];
-        for(int x=0; x<array.length; x++) //Prompt as many times as the array size
-            array[x] = input.nextInt();
-
-        System.out.println(Arrays.toString(array));
 
 
         switch (problem) {
             // Problem: Straßen müssen her
             case 1:
+                ArrayList<Integer>[] graphArray = getMatrix(numNodes);
                 Dijkstra d = new Dijkstra();
-                d.start(d);
+                d.start(d, graphArray, numNodes);
                 break;
             // Problem: Wasserversorgung
             case 2:
