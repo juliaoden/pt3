@@ -157,27 +157,27 @@ public class Dijkstra {
         graphArray[5].add(0);
         graphArray[5].add(4);
         //
-        graphArray[7].add(0);
-        graphArray[7].add(0);
-        graphArray[7].add(3);
-        graphArray[7].add(0);
-        graphArray[7].add(4);
-        graphArray[7].add(3);
-        graphArray[7].add(0);
-        graphArray[7].add(2);
-        graphArray[7].add(0);
-        graphArray[7].add(3);
-        //
-        graphArray[6].add(5);
+        graphArray[6].add(0);
         graphArray[6].add(0);
         graphArray[6].add(3);
         graphArray[6].add(0);
-        graphArray[6].add(0);
+        graphArray[6].add(4);
+        graphArray[6].add(3);
         graphArray[6].add(0);
         graphArray[6].add(2);
         graphArray[6].add(0);
         graphArray[6].add(3);
-        graphArray[6].add(4);
+        //
+        graphArray[7].add(5);
+        graphArray[7].add(0);
+        graphArray[7].add(3);
+        graphArray[7].add(0);
+        graphArray[7].add(0);
+        graphArray[7].add(0);
+        graphArray[7].add(2);
+        graphArray[7].add(0);
+        graphArray[7].add(3);
+        graphArray[7].add(4);
         //
         graphArray[8].add(0);
         graphArray[8].add(0);

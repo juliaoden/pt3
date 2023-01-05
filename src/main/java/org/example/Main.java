@@ -1,9 +1,12 @@
 package org.example;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+
         Scanner input = new Scanner(System.in);
 
         System.out.print("Welches Problem der Graphschaft Schilda wollen Sie angehen? \n"
@@ -16,7 +19,16 @@ public class Main {
                 + "7: Es gibt viel zu tun! Wer macht‘s? \n"
                 + "Geben Sie die Nummer des gewünschten Problems ein! \n"
         );
-        int problem = input.nextInt();
+         int problem = input.nextInt();
+
+        // System.out.println("Geben Sie den Grpahen in folgendem Schame ein: 0,0,0,;0,0,0");
+
+        int[] array = new int[5];
+        for(int x=0; x<array.length; x++) //Prompt as many times as the array size
+            array[x] = input.nextInt();
+
+        System.out.println(Arrays.toString(array));
+
 
         switch (problem) {
             // Problem: Straßen müssen her
