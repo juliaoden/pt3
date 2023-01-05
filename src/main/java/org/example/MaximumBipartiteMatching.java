@@ -17,10 +17,10 @@ public class MaximumBipartiteMatching {
             adjMatrix = new int[applicants][jobs];
         }
 
-        public void canDoJob(int applicant, int job) {
+       /* public void canDoJob(int applicant, int job) {
             //add edge - means applicant can do this job
             adjMatrix[applicant][job] = 1;
-        }
+        }*/
     }
 
     public int[] maxMatching(Graph graph) {
@@ -77,16 +77,17 @@ public class MaximumBipartiteMatching {
         }
         return zuordnung;
     }
-    public static void main(String[] args) {
+    public static void start(int numNodes, String[] namesArray, String[] jobsArray, int[][] matrix) {
 
 
         //Construct Graph with applicants and jobs
-        int applicants = 7;
-        int jobs = 7;
+        int applicants = numNodes;
+        int jobs = numNodes;
         Graph graph = new Graph(applicants, jobs);
-        String[] namen = {"Herr Maier", "Frau Müller", "Frau August", "Frau Schmidt", "Herr Kunze", "Herr Hof", "Frau Lustig"};
-        String[] job = {"Straßenbau", "Verkehrsplanung", "Archäologie", "Gesamtkoordination", "Festplanung", "Wasserversorgung", "Wettkampfausrichtung"};
-        graph.canDoJob(0, 0);
+        String[] namen = namesArray;// {"Herr Maier", "Frau Müller", "Frau August", "Frau Schmidt", "Herr Kunze", "Herr Hof", "Frau Lustig"};
+        String[] job = jobsArray; //{"Straßenbau", "Verkehrsplanung", "Archäologie", "Gesamtkoordination", "Festplanung", "Wasserversorgung", "Wettkampfausrichtung"};
+        graph.adjMatrix = matrix;
+        /*graph.canDoJob(0, 0);
         graph.canDoJob(0, 1);
         graph.canDoJob(0, 2);
         graph.canDoJob(1, 3);
@@ -101,7 +102,7 @@ public class MaximumBipartiteMatching {
         graph.canDoJob(5, 0);
         graph.canDoJob(5, 3);
         graph.canDoJob(6, 1);
-        graph.canDoJob(6, 6);
+        graph.canDoJob(6, 6);*/
 
         MaximumBipartiteMatching m = new MaximumBipartiteMatching();
         m.maxMatching(graph);
