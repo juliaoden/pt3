@@ -3,6 +3,7 @@ package org.example;
 import java.util.*;
 
 // TODO: Hier kommt der Euler rein am Ende, weil File schon auf Github lol
+// TODO: Mit Sprick abklären, weil hier keine Eulertour möglich aber Eulertour gefordert
 public class Hierholzer_Euler
 {
     public static void main(String args[])
@@ -13,7 +14,6 @@ public class Hierholzer_Euler
         adj.add(new ArrayList<Integer>());
         adj.get(0).add(1);
         adj.get(0).add(2);
-        adj.get(0).add(7);
 
 
         adj.add(new ArrayList<Integer>());
@@ -25,14 +25,14 @@ public class Hierholzer_Euler
 
         adj.add(new ArrayList<Integer>());
         adj.get(2).add(0);
-        adj.get(2).add(7);
-        adj.get(2).add(6);
-        adj.get(2).add(4);
         adj.get(2).add(1);
+        adj.get(2).add(3);
+        adj.get(2).add(4);
 
 
         adj.add(new ArrayList<Integer>());
         adj.get(3).add(1);
+        adj.get(3).add(2);
         adj.get(3).add(4);
         adj.get(3).add(5);
 
@@ -41,38 +41,16 @@ public class Hierholzer_Euler
         adj.get(4).add(1);
         adj.get(4).add(2);
         adj.get(4).add(6);
-        adj.get(4).add(5);
         adj.get(4).add(3);
 
         adj.add(new ArrayList<Integer>());
         adj.get(5).add(3);
-        adj.get(5).add(4);
         adj.get(5).add(6);
-        adj.get(5).add(9);
 
         adj.add(new ArrayList<Integer>());
-        adj.get(6).add(2);
-        adj.get(6).add(7);
-        adj.get(6).add(9);
         adj.get(6).add(5);
         adj.get(6).add(4);
 
-        adj.add(new ArrayList<Integer>());
-        adj.get(7).add(0);
-        adj.get(7).add(2);
-        adj.get(7).add(6);
-        adj.get(7).add(9);
-        adj.get(7).add(8);
-
-        adj.add(new ArrayList<Integer>());
-        adj.get(8).add(7);
-        adj.get(8).add(9);
-
-        adj.add(new ArrayList<Integer>());
-        adj.get(9).add(5);
-        adj.get(9).add(6);
-        adj.get(9).add(7);
-        adj.get(9).add(8);
 
 
 
@@ -109,7 +87,7 @@ public class Hierholzer_Euler
         // Current vertex
         int curr_v = 0;
 
-        while (!curr_path.empty())
+        /*while (!curr_path.empty())
         {
             // If there's remaining edge
             if (edges.get(curr_v)>0)
@@ -119,6 +97,9 @@ public class Hierholzer_Euler
 
                 // and remove that edge or decrement the edge count.
                 edges.put(curr_v, edges.get(curr_v) - 1);
+
+                // remove gegenedges
+                edges.put(edges.get(curr_v) - 1, curr_v);
 
                 // Move to next vertex
                 curr_v = curr_path.peek();
@@ -130,7 +111,8 @@ public class Hierholzer_Euler
                 circuit.add(curr_path.peek());
                 curr_v = curr_path.pop();
             }
-        }
+        } */
+
 
         // After getting the circuit, now print it in reverse
         for (int i=circuit.size()-1; i>=0; i--)
