@@ -145,10 +145,9 @@ public class Main {
                 System.out.println("Geben Sie die Namen der Personen ein");
                 String[] names = nodeNames.toArray(new String[0]);
                 System.out.println("Geben Sie die Jobbezeichnungen ein");
-                /*String[] jobs = getStringArray(input, numNodes, false);
-                int[][] matrix = getMatrix(input, numNodes);
+                String[] jobs = nodeNames.toArray(new String[1]);
                 MaximumBipartiteMatching m = new MaximumBipartiteMatching();
-                m.start(numNodes, names, jobs, matrix);*/
+                m.start(numNodes, names, jobs, matrix);
                 break;
         }
 
