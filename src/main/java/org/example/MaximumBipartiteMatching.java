@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -9,12 +10,12 @@ public class MaximumBipartiteMatching {
         HashMap<Integer, Integer> zuordnung = new HashMap<Integer, Integer>();
         int jobs;
         int applicants;
-        int adjMatrix[][];
+        ArrayList<Integer>[] adjMatrix;
 
         public Graph(int applicants, int jobs) {
             this.jobs = jobs;
             this.applicants = applicants;
-            adjMatrix = new int[applicants][jobs];
+            adjMatrix = new ArrayList[jobs];
         }
 
        /* public void canDoJob(int applicant, int job) {
@@ -46,11 +47,11 @@ public class MaximumBipartiteMatching {
         for (int job = 0; job < graph.jobs; job++) {
             //check if applicant can do this job means adjMatrix[applicant][job] == 1
             // and applicant has not considered for this job before, means visited[job]==false
-            if (graph.adjMatrix[applicant][job] == 1 && !visited[job]) {
+            if (graph.adjMatrix[applicant].get(job) == 1 && !visited[job]) {
                 //mark as job is visited, means applicant is considered for this job
                 visited[job] = true;
                 //now check if job was not assigned earlier - assign it to this applicant
-                // OR job was assigned earlier to some other applicant 'X' earlier then
+                // OR job was assigned earlier to some other applicant 'X' earlier than
                 //make recursive call for applicant 'X' to check if some other job can be assigned
                 // so that this job can be assigned to current candidate.
                 int assignedApplicant = assign[job];
@@ -77,14 +78,14 @@ public class MaximumBipartiteMatching {
         }
         return zuordnung;
     }
-    public static void start(int numNodes, String[] namesArray, String[] jobsArray, int[][] matrix) {
+    public static void start(int numNodes, String[] namesArray, String[] jobsArray, ArrayList<Integer>[] matrix) {
 
 
         //Construct Graph with applicants and jobs
         int applicants = numNodes;
         int jobs = numNodes;
         Graph graph = new Graph(applicants, jobs);
-        String[] namen = namesArray;// {"Herr Maier", "Frau Müller", "Frau August", "Frau Schmidt", "Herr Kunze", "Herr Hof", "Frau Lustig"};
+        String[] namen = namesArray; //{"Herr Maier", "Frau Müller", "Frau August", "Frau Schmidt", "Herr Kunze", "Herr Hof", "Frau Lustig"};
         String[] job = jobsArray; //{"Straßenbau", "Verkehrsplanung", "Archäologie", "Gesamtkoordination", "Festplanung", "Wasserversorgung", "Wettkampfausrichtung"};
         graph.adjMatrix = matrix;
         /*graph.canDoJob(0, 0);

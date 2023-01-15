@@ -53,7 +53,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        System.out.print("Welches Problem der Graphschaft Schilda wollen Sie angehen? \n"
+        System.out.print("Welches Problem der Grafschaft Schilda wollen Sie angehen? \n"
                 + "1: Straßen müssen her \n"
                 + "2: Wasserversorgung \n"
                 + "3: Stromversorgung \n"
@@ -91,27 +91,36 @@ public class Main {
             matrix[i] = new ArrayList<>();
         }
 
-        for(int i = 0; i<numNodes; i++){
+        for (int i = 0; i < numNodes; i++) {
             String target = nodeNames.get(i) + " ";
             // Remove node name from string
-            String numberString = lines.get(i+1).replace(target, "");
+            String numberString = lines.get(i + 1).replace(target, "");
             // Convert single lines from input to ArrayList
             ArrayList<String> line = new ArrayList<>(Arrays.asList(numberString.split(" ")));
             // Convert ArrayList to Integer array
             int[] arr = line.stream().mapToInt(j -> Integer.parseInt(j)).toArray();
             //
-            for(int k = 0; k <numNodes; k++){
+            for (int k = 0; k < numNodes; k++) {
                 matrix[i].add(arr[k]);
             }
 
         }
 
+        // TODO: Von Nutzer abfragen
+        int source = 0;
+        int destination = 0;
+        int startNode = 0;
+
         switch (problem) {
             // Problem: Straßen müssen her
             case 1:
+                Prim p = new Prim();
+                p.start(matrix, numNodes);
                 break;
             // Problem: Wasserversorgung
             case 2:
+                MaxFlow_Ford_Fulkerson ff1 = new MaxFlow_Ford_Fulkerson();
+                ff1.start(matrix, numNodes, source, destination);
                 break;
             // Problem: Stromversorgung
             case 3:
@@ -119,15 +128,19 @@ public class Main {
             // Problem: Historische Funde
             case 4:
                 Dijkstra d = new Dijkstra();
-                //d.start(d, matrix, numNodes);
+                d.start(matrix, numNodes);
                 break;
             // Problem: Die Festhochzeit – das Verteilen der Einladungen
             case 5:
+                Hierholzer_Euler h = new Hierholzer_Euler();
+                h.findTour(matrix, numNodes);
                 break;
             // Problem: Wohin nur mit den Gästen?
             case 6:
+                MaxFlow_Ford_Fulkerson ff2 = new MaxFlow_Ford_Fulkerson();
+                ff2.start(matrix, numNodes, source, destination);
                 break;
-            // Problem: Es gibt viel zu tun! Wer macht‘s?
+            // Problem: Es gibt viel zu tun! Wer macht's?
             case 7:
                 System.out.println("Geben Sie die Namen der Personen ein");
                 String[] names = nodeNames.toArray(new String[0]);

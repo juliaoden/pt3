@@ -75,7 +75,7 @@ public class Prim {
         //}
     }
 
-    public void start(Prim p, ArrayList<Integer>[] graph, int numNodes) {
+    public void start(ArrayList<Integer>[] graph, int numNodes) {
         n = numNodes;
         graphArray = graph;
         visited = new Boolean[graphArray.length];
@@ -201,9 +201,9 @@ public class Prim {
 
 
         // Replace all zeros with MAX_INT
-        p.setMaxInt(graphArray);
+        setMaxInt(graphArray);
         // Start Dijkstra Algorithm
-        p.prim(0);
+        prim(0);
 
         System.out.print("Reihenfolge der Häuser ist ");
         for (Integer visitedNode : visitedNodes) {

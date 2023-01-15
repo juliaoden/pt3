@@ -1,14 +1,15 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class MaxFlow_Ford_Fulkerson {
     static class Graph {
         int vertices;
-        int graph[][];
+        ArrayList<Integer>[] graph;
 
-        public Graph(int vertex, int[][] graph) {
+        public Graph(int vertex, ArrayList<Integer>[] graph) {
             this.vertices = vertex;
             this.graph = graph;
         }
@@ -20,7 +21,7 @@ public class MaxFlow_Ford_Fulkerson {
             //initialize residual graph same as original graph
             for (int i = 0; i <vertices ; i++) {
                 for (int j = 0; j <vertices ; j++) {
-                    residualGraph[i][j] = graph[i][j];
+                    residualGraph[i][j] = graph[i].get(j);
                 }
             }
 
@@ -96,7 +97,7 @@ public class MaxFlow_Ford_Fulkerson {
     }
 
     public static void main(String[] args) {
-        int vertices = 9;
+        /*int vertices = 9;
         int graph[][] = { {0,5,0,0,0,0,5,10,0},
                 {5,0,8,6,0,0,0,0,0},
                 {0,8,0,0,0,0,0,0,15},
@@ -112,6 +113,11 @@ public class MaxFlow_Ford_Fulkerson {
         int destination = 8;
         int max_flow = g.findMaxFlow(source,destination);
         System.out.println("Maximum flow from source: " + source + " to destination: " + destination
-                + " is: " + max_flow);
+                + " is: " + max_flow);*/
+    }
+
+    public void start(ArrayList<Integer>[] graph, int vertices, int source, int destination){
+        Graph g = new Graph(vertices, graph);
+        int max_flow = g.findMaxFlow(source, destination);
     }
 }

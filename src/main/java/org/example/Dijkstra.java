@@ -35,7 +35,7 @@ public class Dijkstra {
         }
     }
 
-    public void dijkstra( int startNode) {
+    public void dijkstra(int startNode) {
         int startgewicht = 10; // TODO!!
         int nextNode;
         valueNodes.set(startNode, startgewicht);
@@ -63,7 +63,7 @@ public class Dijkstra {
         // the current node is the penultimate node
         if(bestNode == currentNode){
             // find the node which isn´t already visited
-            // TODO: Was passiert, wenn letzter nicht besuchter Knoten keine Verbundung zum derzeitigen Knoten hat?
+            // TODO: Was passiert, wenn letzter nicht besuchter Knoten keine Verbindung zum derzeitigen Knoten hat?
             return java.util.Arrays.asList(visited).indexOf(Boolean.FALSE);
         } else{
             return bestNode;
@@ -85,13 +85,13 @@ public class Dijkstra {
     }
 
 
-    public void start(Dijkstra d) {
+    public void start(ArrayList<Integer>[] matrix, int numNodes) {
 
         // initializing
-        d.initialize();
+        initialize();
 
         // TODO: Vom Nutzenden eingeben lassen
-        graphArray[0].add(0);
+        /*graphArray[0].add(0);
         graphArray[0].add(3);
         graphArray[0].add(2);
         graphArray[0].add(1);
@@ -106,13 +106,13 @@ public class Dijkstra {
         graphArray[3].add(1);
         graphArray[3].add(0);
         graphArray[3].add(7);
-        graphArray[3].add(0);
+        graphArray[3].add(0);*/
 
 
         // Replace all zeros with MAX_INT
-        d.setMaxInt(graphArray);
+        setMaxInt(graphArray);
         // Start Dijkstra Algorithm
-        d.dijkstra(0);
+        dijkstra(0);
 
         System.out.print("Reihenfolge der Häuser ist ");
         for (int i = 0; i < visitedNodes.size(); i++) {
