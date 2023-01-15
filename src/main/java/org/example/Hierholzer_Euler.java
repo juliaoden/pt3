@@ -2,128 +2,112 @@ package org.example;
 
 import java.util.*;
 
-// TODO: Hier kommt der Euler rein am Ende, weil File schon auf Github lol
-// TODO: Mit Sprick abklären, weil hier keine Eulertour möglich aber Eulertour gefordert
-public class Hierholzer_Euler
-{
-    public static void main(String args[])
-    {
-        List< List<Integer> > adj = new ArrayList<>();
+class Hierholzer_Euler {
 
-        // Build the Graph
-        adj.add(new ArrayList<Integer>());
-        adj.get(0).add(1);
-        adj.get(0).add(2);
+    public static void main(String[] args) {
+        int[][] matrix = new int[][]{
+                /* {0,1,1,0,0,0,0,1,0,0},
+                 {1,0,5,2,4,0,0,0,0,0},
+                 {3,5,0,0,4,0,3,3,0,0},
+                 {0,2,0,0,3,3,0,0,0,0},
+                 {0,4,4,3,0,2,4,0,0,0},
+                 {0,0,0,3,2,0,3,0,0,4},
+                 {0,0,3,0,4,3,0,2,0,3},
+                 {5,0,3,0,0,0,2,0,3,4},
+                 {0,0,0,0,0,0,0,3,0,2},
+                 {0,0,0,0,0,4,3,4,2,0}*/
+                {0, 1, 1, 0, 0, 0, 0},
+                {1, 0, 1, 1, 1, 0, 0},
+                {1, 1, 0, 1, 1, 0, 0},
+                {0, 1, 1, 0, 1, 1, 0},
+                {0, 1, 1, 1, 0, 0, 1},
+                {0, 0, 0, 1, 0, 0, 1},
+                {0, 0, 0, 0, 1, 1, 0}
+        };
 
-
-        adj.add(new ArrayList<Integer>());
-        adj.get(1).add(0);
-        adj.get(1).add(2);
-        adj.get(1).add(3);
-        adj.get(1).add(4);
-
-
-        adj.add(new ArrayList<Integer>());
-        adj.get(2).add(0);
-        adj.get(2).add(1);
-        adj.get(2).add(3);
-        adj.get(2).add(4);
-
-
-        adj.add(new ArrayList<Integer>());
-        adj.get(3).add(1);
-        adj.get(3).add(2);
-        adj.get(3).add(4);
-        adj.get(3).add(5);
-
-
-        adj.add(new ArrayList<Integer>());
-        adj.get(4).add(1);
-        adj.get(4).add(2);
-        adj.get(4).add(6);
-        adj.get(4).add(3);
-
-        adj.add(new ArrayList<Integer>());
-        adj.get(5).add(3);
-        adj.get(5).add(6);
-
-        adj.add(new ArrayList<Integer>());
-        adj.get(6).add(5);
-        adj.get(6).add(4);
-
-
-
-
-        System.out.println("The Eulerian Circuit for the Graph is : ");
-
-        printEulerianCircuit(adj);
-
+        System.out.println(findTour(matrix));
 
     }
 
-    static void printEulerianCircuit(List< List<Integer> > adj)
-    {
-        // adj represents the adjacency list of
-        // the directed graph
-        // edge represents the number of edges emerging from a vertex
-
-        Map<Integer,Integer> edges=new HashMap<Integer,Integer>();
-
-        for (int i=0; i<adj.size(); i++)
-        {
-            //find the count of edges to keep track of unused edges
-            edges.put(i,adj.get(i).size());
-        }
-
-        // Maintain a stack to keep vertices
-        Stack<Integer> curr_path = new Stack<Integer>();
-
-        // vector to store final circuit
-        List<Integer> circuit = new ArrayList<Integer>();
-
-        // We start from vertex 0 TODO
-        curr_path.push(0);
-
-        // Current vertex
-        int curr_v = 0;
-
-        /*while (!curr_path.empty())
-        {
-            // If there's remaining edge
-            if (edges.get(curr_v)>0)
-            {
-                // Push the vertex visited.
-                curr_path.push(adj.get(curr_v).get(edges.get(curr_v) - 1));
-
-                // and remove that edge or decrement the edge count.
-                edges.put(curr_v, edges.get(curr_v) - 1);
-
-                // remove gegenedges
-                edges.put(edges.get(curr_v) - 1, curr_v);
-
-                // Move to next vertex
-                curr_v = curr_path.peek();
+    static List<Integer> findTour(int[][] adjacencyMatrix) {
+        int n = adjacencyMatrix.length;
+        List<Integer> tour = new ArrayList<>();
+        Set<Integer> oddDegreeVertices = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            int degree = 0;
+            for (int j = 0; j < n; j++) {
+                if (adjacencyMatrix[i][j] == 1) {
+                    degree++;
+                }
             }
-
-            // back-track to find remaining circuit
-            else
-            {
-                circuit.add(curr_path.peek());
-                curr_v = curr_path.pop();
+            if (degree % 2 == 1) {
+                oddDegreeVertices.add(i);
             }
-        } */
-
-
-        // After getting the circuit, now print it in reverse
-        for (int i=circuit.size()-1; i>=0; i--)
-        {
-            System.out.print(circuit.get(i));
-
-            if(i!=0)
-                System.out.print(" -> ");
         }
+        if (oddDegreeVertices.size() > 0) {
+            // Graph ist ungültig
+            System.out.println("Error: Der Graph hat mehr als einen Knoten mit ungeradem Grad."); // TODO
+            return tour;
+        }
+        int start;
+        if (oddDegreeVertices.size() == 0) {
+            // Wähle beliebigen Knoten als Start
+            start = 0;
+        } else {
+            // Wähle Knoten mit ungeradem Grad als Start
+            start = oddDegreeVertices.iterator().next();
+        }
+        tour.add(start);
+        int current = start;
+        while (true) {
 
+            List<Integer> subTour = new ArrayList<>();
+            current = start;
+            do {
+                for (int i = 0; i < n; i++) {
+                    if (adjacencyMatrix[current][i] == 1) {
+                        adjacencyMatrix[current][i] = 0;
+                        adjacencyMatrix[i][current] = 0;
+                        current = i;
+                        break;
+                    }
+                }
+                subTour.add(current);
+            } while (current != start);
+
+            tour.addAll(start+1, subTour);
+            start = findNextVertex(adjacencyMatrix, n);
+
+            // TODO optimieren mit nextVertex
+            boolean tourIsEuler = true;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (adjacencyMatrix[i][j] == 1) {
+                        tourIsEuler = false;
+                        break;
+                    }
+                }
+            }
+            if (tourIsEuler) {
+                break;
+            }
+        }
+        return tour;
     }
 
+    public static int findNextVertex(int[][] adjacencyMatrix, int n) {
+        int nextVertex = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (adjacencyMatrix[i][j] == 1) {
+                    return i;
+                }
+
+            }
+
+        }
+
+        return nextVertex;
+    }
 }
 
