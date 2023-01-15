@@ -69,6 +69,9 @@ public class Main {
         switch (problem) {
             // Problem: Straßen müssen her
             case 1:
+                ArrayList<Integer>[] graphArray = getArrayListMatrix(input, numNodes);
+                Prim p = new Prim();
+                p.start(p, graphArray, numNodes);
                 break;
             // Problem: Wasserversorgung
             case 2:
@@ -78,9 +81,8 @@ public class Main {
                 break;
             // Problem: Historische Funde
             case 4:
-                ArrayList<Integer>[] graphArray = getArrayListMatrix(input, numNodes);
                 Dijkstra d = new Dijkstra();
-                d.start(d, graphArray, numNodes);
+                d.start(d);
                 break;
             // Problem: Die Festhochzeit – das Verteilen der Einladungen
             case 5:
