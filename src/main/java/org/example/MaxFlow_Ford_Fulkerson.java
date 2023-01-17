@@ -96,8 +96,8 @@ public class MaxFlow_Ford_Fulkerson {
         }
     }
 
-    public static void main(String[] args) {
-        /*int vertices = 9;
+    /*public static void main(String[] args) {
+        int vertices = 9;
         int graph[][] = { {0,5,0,0,0,0,5,10,0},
                 {5,0,8,6,0,0,0,0,0},
                 {0,8,0,0,0,0,0,0,15},
@@ -113,11 +113,12 @@ public class MaxFlow_Ford_Fulkerson {
         int destination = 8;
         int max_flow = g.findMaxFlow(source,destination);
         System.out.println("Maximum flow from source: " + source + " to destination: " + destination
-                + " is: " + max_flow);*/
-    }
+                + " is: " + max_flow);
+    }*/
 
     public void start(ArrayList<Integer>[] graph, int vertices, int source, int destination){
         Graph g = new Graph(vertices, graph);
         int max_flow = g.findMaxFlow(source, destination);
+        System.out.println(max_flow);
     }
 }

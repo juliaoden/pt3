@@ -1,6 +1,6 @@
 package org.example;
 
-import java.util.*;
+/*import java.util.*;
 
 public class Dijkstra {
 
@@ -19,7 +19,7 @@ public class Dijkstra {
         }
         /*for (int i = 0; i < n; i++) {
             visited[i] = false;
-        }*/
+        }*
         for (int i = 0; i < n; i++) {
             valueNodes.set(i, Integer.MAX_VALUE);
         }
@@ -67,7 +67,7 @@ public class Dijkstra {
             return java.util.Arrays.asList(visited).indexOf(Boolean.FALSE);
         } else{
             return bestNode;
-        }*/
+        }*
         int nextNode, edgeWeight; //nextNode = e, edgeWeight = 10
         for(int i= 0; i< graphArray.length; i++){
             nextNode = i;
@@ -106,7 +106,7 @@ public class Dijkstra {
         graphArray[3].add(1);
         graphArray[3].add(0);
         graphArray[3].add(7);
-        graphArray[3].add(0);*/
+        graphArray[3].add(0);*
 
 
         // Replace all zeros with MAX_INT
@@ -117,9 +117,8 @@ public class Dijkstra {
         System.out.print("Reihenfolge der Häuser ist ");
         for (int i = 0; i < visitedNodes.size(); i++) {
             System.out.print(visitedNodes.get(i));
-        }
-
+        }return 0;
     }
 
 
-}
+}*/

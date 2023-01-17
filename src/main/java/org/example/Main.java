@@ -114,29 +114,36 @@ public class Main {
         switch (problem) {
             // Problem: Straßen müssen her
             case 1:
-                Prim p = new Prim();
-                p.start(matrix, numNodes);
+                Dijkstra2 d2 = new Dijkstra2();
+                d2.start(matrix, numNodes, 0);
                 break;
             // Problem: Wasserversorgung
             case 2:
+                source = 8;
+                destination=7;
                 MaxFlow_Ford_Fulkerson ff1 = new MaxFlow_Ford_Fulkerson();
                 ff1.start(matrix, numNodes, source, destination);
                 break;
             // Problem: Stromversorgung
             case 3:
+                Prim p =  new Prim();
+                p.start(matrix, numNodes);
                 break;
             // Problem: Historische Funde
             case 4:
-                Dijkstra d = new Dijkstra();
-                d.start(matrix, numNodes);
+                Dijkstra2 d = new Dijkstra2();
+                d.start(matrix, numNodes, 0);
                 break;
             // Problem: Die Festhochzeit – das Verteilen der Einladungen
             case 5:
                 Hierholzer_Euler h = new Hierholzer_Euler();
-                h.findTour(matrix, numNodes);
+               List<Integer> result =  h.findTour(matrix, numNodes);
+                System.out.println(result);
                 break;
             // Problem: Wohin nur mit den Gästen?
             case 6:
+                source=0;
+                destination = 5;
                 MaxFlow_Ford_Fulkerson ff2 = new MaxFlow_Ford_Fulkerson();
                 ff2.start(matrix, numNodes, source, destination);
                 break;

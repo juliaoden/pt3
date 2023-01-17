@@ -62,6 +62,7 @@ class Hierholzer_Euler {
                         break;
                     }
                 }
+
             }
             if (tourIsEuler) {
                 break;
