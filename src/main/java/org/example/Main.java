@@ -114,7 +114,7 @@ public class Main {
         switch (problem) {
             // Problem: Straßen müssen her
             case 1:
-                Dijkstra2 d2 = new Dijkstra2();
+                Dijkstra d2 = new Dijkstra();
                 d2.start(matrix, numNodes, 0);
                 break;
             // Problem: Wasserversorgung
@@ -127,11 +127,11 @@ public class Main {
             // Problem: Stromversorgung
             case 3:
                 Prim p =  new Prim();
-                p.start(matrix, numNodes, 0);
+                p.start(matrix, numNodes, 0, nodeNames);
                 break;
             // Problem: Historische Funde
             case 4:
-                Dijkstra2 d = new Dijkstra2();
+                Dijkstra d = new Dijkstra();
                 d.start(matrix, numNodes, 0);
                 break;
             // Problem: Die Festhochzeit – das Verteilen der Einladungen

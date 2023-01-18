@@ -1,124 +1,168 @@
 package org.example;
 
-/*import java.util.*;
+import java.util.*;
+import java.lang.*;
 
-public class Dijkstra {
+class Dijkstra {
 
-    static int n = 4; // Number of nodes
-
-    static ArrayList<Integer> visitedNodes = new ArrayList<>(); // Serie of nodes
-
-    static  ArrayList<Integer> valueNodes = new ArrayList<>();
-
-    static ArrayList<Integer>[] graphArray = new ArrayList[n]; // Adjacency matrix
-    //static Boolean[] visited = new Boolean[graphArray.length]; // Visited Array
-
-    public void initialize(){
-        for (int i = 0; i < n; i++) {
-            graphArray[i] = new ArrayList<Integer>();
-        }
-        /*for (int i = 0; i < n; i++) {
-            visited[i] = false;
-        }*
-        for (int i = 0; i < n; i++) {
-            valueNodes.set(i, Integer.MAX_VALUE);
-        }
-    }
-
-    public void setMaxInt(ArrayList<Integer>[] graph) {
-        for (int i = 0; i < graph.length; i++) {
-            for (int j = 0; j < graph.length - 1; j++) {
-                if (graph[i].get(j) == 0) {
-                    graph[i].set(j, Integer.MAX_VALUE);
-                }
-            }
-        }
-    }
-
-    public void dijkstra(int startNode) {
-        int startgewicht = 10; // TODO!!
-        int nextNode;
-        valueNodes.set(startNode, startgewicht);
-        while(true){
-            nextNode = getNextVertex(startNode);
-
-
-        }
-    }
-
-
-    public int getNextVertex(int curNode) {
-        /*
-        int curWeight, nextWeight, x, bestNode = currentNode;
-        for (int j = 0; j < graph.length - 1; j++) {
-            curWeight = graph[currentNode].get(j); // current weight
-            nextWeight = graph[currentNode].get(j + 1); // next weight
-            // Check if next weight is less than current weight and if it isn´t already visited
-            if ((nextWeight < curWeight) && (nextWeight != 0) && !visited[j]) {
-                // best node is the next node
-                bestNode = j + 1;
-            }
-        }
-
-        // the current node is the penultimate node
-        if(bestNode == currentNode){
-            // find the node which isn´t already visited
-            // TODO: Was passiert, wenn letzter nicht besuchter Knoten keine Verbindung zum derzeitigen Knoten hat?
-            return java.util.Arrays.asList(visited).indexOf(Boolean.FALSE);
-        } else{
-            return bestNode;
-        }*
-        int nextNode, edgeWeight; //nextNode = e, edgeWeight = 10
-        for(int i= 0; i< graphArray.length; i++){
-            nextNode = i;
-            for( int k = 0; k < graphArray.length; k++){
-                edgeWeight = graphArray[nextNode].get(k);
-                if(valueNodes.get(curNode)+edgeWeight <valueNodes.get(nextNode) ){
-                    valueNodes.set(nextNode, valueNodes.get(curNode)+edgeWeight);
-                }
-
+    int num_Vertices ;  //max number of vertices in graph
+    // find a vertex with minimum distance
+    int minDistance(int path_array[], Boolean sptSet[])   {
+        // Initialize min value 
+        int min = Integer.MAX_VALUE, min_index = -1;
+        for (int v = 0; v < num_Vertices; v++)
+            if (sptSet[v] == false && path_array[v] <= min) {
+                min = path_array[v];
+                min_index = v;
             }
 
+        return min_index;
+    }
 
+    // print the array of distances (path_array)
+    void printMinpath(int path_array[])   {
+        System.out.println("Vertex \t Minimum Distance from Source");
+        for (int i = 0; i < num_Vertices; i++)
+            System.out.println(i + " \t\t\t " + path_array[i]);
+    }
+
+    // Implementation of Dijkstra's algorithm for graph (adjacency matrix)
+    void algo_dijkstra(ArrayList<Integer>[] graph, int src_node)  {
+        int path_array[] = new int[num_Vertices]; // The output array. dist[i] will hold 
+        // the shortest distance from src to i 
+
+        // spt (shortest path set) contains vertices that have shortest path 
+        Boolean sptSet[] = new Boolean[num_Vertices];
+
+        // Initially all the distances are INFINITE and stpSet[] is set to false 
+        for (int i = 0; i < num_Vertices; i++) {
+            path_array[i] = Integer.MAX_VALUE;
+            sptSet[i] = false;
         }
-    return 0;
+
+        // Path between vertex and itself is always 0 
+        path_array[src_node] = 0;
+        // now find shortest path for all vertices
+        for (int count = 0; count < num_Vertices - 1; count++) {
+            // call minDistance method to find the vertex with min distance
+            int u = minDistance(path_array, sptSet);
+            // the current vertex u is processed
+            sptSet[u] = true;
+            // process adjacent nodes of the current vertex
+            for (int v = 0; v < num_Vertices; v++)
+
+                // if vertex v not in sptset then update it  
+                if (!sptSet[v] && graph[u].get(v) != 0 && path_array[u] !=
+                        Integer.MAX_VALUE && path_array[u]
+                        + graph[u].get(v) < path_array[v])
+                    path_array[v] = path_array[u] + graph[u].get(v);
+        }
+
+        // print the path array 
+        printMinpath(path_array);
     }
 
 
-    public void start(ArrayList<Integer>[] matrix, int numNodes) {
+    public void start(ArrayList<Integer>[] graph, int numModes, int startNode)
+    {
+        //example graph is given below
+        /*ArrayList<Integer>[] graph = new ArrayList[num_Vertices];
+        for (int i = 0; i < num_Vertices; i++) {
+            graph[i] = new ArrayList<>();
+        }
 
-        // initializing
-        initialize();
+        ArrayList<Integer> a = new ArrayList<Integer>() {{
+            add(0);
+            add(0);
+            add(0);
+            add(0);
+            add(5);
+            add(1);
+            add(5);
+            add(0);
+        }};
+        ArrayList<Integer> b = new ArrayList<Integer>() {{
+            add(0);
+            add(0);
+            add(1);
+            add(5);
+            add(0);
+            add(0);
+            add(4);
+            add(0);
+        }};
+        ArrayList<Integer> c = new ArrayList<Integer>() {{
+            add(0);
+            add(1);
+            add(0);
+            add(4);
+            add(0);
+            add(0);
+            add(0);
+            add(3);
+        }};
+        ArrayList<Integer> d = new ArrayList<Integer>() {{
+            add(0);
+            add(5);
+            add(4);
+            add(0);
+            add(0);
+            add(0);
+            add(0);
+            add(0);
+        }};
+        ArrayList<Integer> e = new ArrayList<Integer>() {{
+            add(5);
+            add(0);
+            add(0);
+            add(0);
+            add(0);
+            add(2);
+            add(0);
+            add(0);
+        }};
+        ArrayList<Integer> f = new ArrayList<Integer>() {{
+            add(1);
+            add(0);
+            add(0);
+            add(0);
+            add(2);
+            add(0);
+            add(3);
+            add(0);
+        }};
+        ArrayList<Integer> g = new ArrayList<Integer>() {{
+            add(5);
+            add(4);
+            add(0);
+            add(0);
+            add(0);
+            add(3);
+            add(0);
+            add(2);
+        }};
+        ArrayList<Integer> h = new ArrayList<Integer>() {{
+            add(0);
+            add(0);
+            add(3);
+            add(0);
+            add(0);
+            add(2);
+            add(2);
+            add(0);
+        }};
 
-        // TODO: Vom Nutzenden eingeben lassen
-        /*graphArray[0].add(0);
-        graphArray[0].add(3);
-        graphArray[0].add(2);
-        graphArray[0].add(1);
-        graphArray[1].add(3);
-        graphArray[1].add(0);
-        graphArray[1].add(4);
-        graphArray[1].add(0);
-        graphArray[2].add(2);
-        graphArray[2].add(4);
-        graphArray[2].add(0);
-        graphArray[2].add(7);
-        graphArray[3].add(1);
-        graphArray[3].add(0);
-        graphArray[3].add(7);
-        graphArray[3].add(0);*
+        graph[0] = a;
+        graph[1] = b;
+        graph[2] = c;
+        graph[3] = d;
+        graph[4] = e;
+        graph[5] = f;
+        graph[6] = g;
+        graph[7] = h;
 
-
-        // Replace all zeros with MAX_INT
-        setMaxInt(graphArray);
-        // Start Dijkstra Algorithm
-        dijkstra(0);
-
-        System.out.print("Reihenfolge der Häuser ist ");
-        for (int i = 0; i < visitedNodes.size(); i++) {
-            System.out.print(visitedNodes.get(i));
-        }return 0;
+        Dijkstra2 dijkstra2 = new Dijkstra2();*/
+        num_Vertices = numModes;
+        algo_dijkstra(graph, startNode);
     }
-
-
-}*/
+}

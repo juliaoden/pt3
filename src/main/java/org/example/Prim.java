@@ -8,19 +8,15 @@ package org.example;
 import java.util.*;
 
 public class Prim {
+    static int wayLength = 0; // Length of all the cables
+    int parentNode = 0; // Starting point of one cable
+    static ArrayList<Integer> visitedNodes = new ArrayList(); // Stack of visited nodes
+    static int[][] output;// matrix which get´s returned
+    static ArrayList<Integer>[] graphArray; // Graph matrix
+    static Boolean[] visited; // Visited array
 
-    static int n; // Number of nodes
 
-    static int wayLength = 0;
-    int parentNode = 0;
-
-    static ArrayList<Integer> visitedNodes = new ArrayList(); // Serie of nodes
-
-    static int[][] output;
-
-    static ArrayList<Integer>[] graphArray; // Adjacency matrix
-    static Boolean[] visited; // Visited Array
-
+    // Method to initialize all necessary arrays
     public void initialize() {
         // initializing graph array
         for (int i = 0; i < graphArray.length; i++) {
@@ -30,218 +26,112 @@ public class Prim {
                 }
             }
         }
+
         // initializing visited array
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < visited.length; i++) {
             visited[i] = false;
         }
 
         // initializing output array
-        for (int i = 0; i < n; i++) {
-            for (int j = 0;  j < n; j++){
+        for (int i = 0; i < output.length; i++) {
+            for (int j = 0;  j < output.length; j++){
                 output[i][j] = 0;
             }
         }
     }
 
-    public int[][] prim(int start) {
+    public void prim(int start) {
         int nextNode;
         // Current node is marked as visited
         visited[start] = true;
+        // Adding start node to visited node stack
         visitedNodes.add(start);
         for (int i = 0; i < graphArray.length - 1; i++) {
             // Searching for next node
             nextNode = getNextVertex();
             // Marking next node as visited
             if (nextNode != -1) visited[nextNode] = true;
-            // Add next node to path of nodes
-            //visitedNodes.add(parentNode);
-            //System.out.println("Parent node: " +parentNode + " Next node: " + nextNode);
+            // Adding next node to path of nodes
+            visitedNodes.add(nextNode);
+            // Adding the way to the output array
             output[parentNode][nextNode] = 1;
             output[nextNode][parentNode] = 1;
-            visitedNodes.add(nextNode);
         }
-        return output;
     }
 
-
+    // Method for finding next cheapest node
     public int getNextVertex() {
         int curWeight, bestNode = -1, bestWeight = Integer.MAX_VALUE;
         for (int i = 0; i < visitedNodes.size(); i++) {
             for (int curNode = 0; curNode < graphArray.length; curNode++) {
-                curWeight = graphArray[visitedNodes.get(i)].get(curNode); // current weight
-                // Check if current weight is less than best weight and if it isn´t already visited
+                // current weight
+                curWeight = graphArray[visitedNodes.get(i)].get(curNode);
+                // Check if current weight is less than best weight, if it isn´t already visited and if there are less than 6 connections
                 if ((curWeight < bestWeight) && !visited[curNode] && !isFull(curNode)) {
-                    // best node is the current node
+                    // Setting parent node as current node from stack
                     parentNode = visitedNodes.get(i);
+                    // Best node is the current node
                     bestNode = curNode;
+                    // Best weight is the current weight
                     bestWeight = curWeight;
-
                 }
             }
         }
-        // adding node value to length
+        // adding the best weight to the length
         wayLength += bestWeight;
         return bestNode;
         //}
     }
 
+    // Method for checking if the node is connected to more than 5 other nodes
     public boolean isFull(int curNode){
         int count = 0;
+        // Initially the node isn´t connected to more than 5 nodes
         boolean isFull = false;
         for (int i = 0; i < output.length; i++){
-            if(output[curNode][i] > 0){
+            if(output[curNode][i] == 1){
+                // if there is a connection to another node increase counter
                 count++;
             }
         }
+        // Node is connected to more than 5 nodes
         if (count >= 5) isFull = true;
         return isFull;
     }
 
-    public void start(ArrayList<Integer>[] graph, int numNodes, int startNode) {
-        n = numNodes;
-        graphArray = graph;
-        visited = new Boolean[graphArray.length];
-        output = new int[numNodes][numNodes];
+    public void print(ArrayList<String> nodeNames){
+        System.out.print("Reihenfolge der Häuser ist \n  ");
 
-
-
-        //
-        /*
-        //
-        graphArray[0].add(0);
-        graphArray[0].add(4);
-        graphArray[0].add(3);
-        graphArray[0].add(0);
-        graphArray[0].add(0);
-        graphArray[0].add(0);
-        graphArray[0].add(0);
-        graphArray[0].add(5);
-        graphArray[0].add(0);
-        graphArray[0].add(0);
-        //
-        graphArray[1].add(4);
-        graphArray[1].add(0);
-        graphArray[1].add(5);
-        graphArray[1].add(2);
-        graphArray[1].add(4);
-        graphArray[1].add(0);
-        graphArray[1].add(0);
-        graphArray[1].add(0);
-        graphArray[1].add(0);
-        graphArray[1].add(0);
-        //
-        graphArray[2].add(3);
-        graphArray[2].add(5);
-        graphArray[2].add(0);
-        graphArray[2].add(0);
-        graphArray[2].add(4);
-        graphArray[2].add(0);
-        graphArray[2].add(3);
-        graphArray[2].add(3);
-        graphArray[2].add(0);
-        graphArray[2].add(0);
-        //
-        graphArray[3].add(0);
-        graphArray[3].add(2);
-        graphArray[3].add(0);
-        graphArray[3].add(0);
-        graphArray[3].add(3);
-        graphArray[3].add(3);
-        graphArray[3].add(0);
-        graphArray[3].add(0);
-        graphArray[3].add(0);
-        graphArray[3].add(0);
-        //
-        graphArray[4].add(0);
-        graphArray[4].add(4);
-        graphArray[4].add(4);
-        graphArray[4].add(3);
-        graphArray[4].add(0);
-        graphArray[4].add(2);
-        graphArray[4].add(4);
-        graphArray[4].add(0);
-        graphArray[4].add(0);
-        graphArray[4].add(0);
-        //
-        graphArray[5].add(0);
-        graphArray[5].add(0);
-        graphArray[5].add(0);
-        graphArray[5].add(3);
-        graphArray[5].add(2);
-        graphArray[5].add(0);
-        graphArray[5].add(3);
-        graphArray[5].add(0);
-        graphArray[5].add(0);
-        graphArray[5].add(4);
-        //
-        graphArray[6].add(0);
-        graphArray[6].add(0);
-        graphArray[6].add(3);
-        graphArray[6].add(0);
-        graphArray[6].add(4);
-        graphArray[6].add(3);
-        graphArray[6].add(0);
-        graphArray[6].add(2);
-        graphArray[6].add(0);
-        graphArray[6].add(3);
-        //
-        graphArray[7].add(5);
-        graphArray[7].add(0);
-        graphArray[7].add(3);
-        graphArray[7].add(0);
-        graphArray[7].add(0);
-        graphArray[7].add(0);
-        graphArray[7].add(2);
-        graphArray[7].add(0);
-        graphArray[7].add(3);
-        graphArray[7].add(4);
-        //
-        graphArray[8].add(0);
-        graphArray[8].add(0);
-        graphArray[8].add(0);
-        graphArray[8].add(0);
-        graphArray[8].add(0);
-        graphArray[8].add(0);
-        graphArray[8].add(0);
-        graphArray[8].add(3);
-        graphArray[8].add(0);
-        graphArray[8].add(2);
-        //
-        graphArray[9].add(0);
-        graphArray[9].add(0);
-        graphArray[9].add(0);
-        graphArray[9].add(0);
-        graphArray[9].add(0);
-        graphArray[9].add(4);
-        graphArray[9].add(3);
-        graphArray[9].add(4);
-        graphArray[9].add(2);
-        graphArray[9].add(0);
-        */
-
-
-        // Initializing array / matrizes
-        initialize();
-        // Start Dijkstra Algorithm
-        int[][] output = prim(startNode);
-
-        System.out.print("Reihenfolge der Häuser ist \n");
-        for (Integer visitedNode : visitedNodes) {
-            System.out.print(visitedNode);
+        // Printing first line with node names
+        for(int i = 0; i < nodeNames.size(); i++){
+            System.out.print(nodeNames.get(i) + " ");
         }
+
         System.out.println();
 
-        for(int i = 0; 0 < output.length; i++){
-
+        // Printing the rest of the matrix
+        for(int i = 0; i < output.length; i++){
+            // Printing the node name and one space
+            System.out.print(nodeNames.get(i) + " ");
             for(int j=0; j< output.length; j++){
+                // Printing the values of the matrix with a space
                 System.out.print(output[i][j] + " ");
             }
             System.out.println();
         }
-
-        //System.out.printf("%n Length of visited nodes %d%n", wayLength);
-
+        System.out.printf("Length of visited nodes %d%n", wayLength);
     }
 
+    public void start(ArrayList<Integer>[] graph, int numNodes, int startNode, ArrayList<String> nodeNames) {
+        graphArray = graph;
+        visited = new Boolean[graphArray.length];
+        output = new int[numNodes][numNodes];
 
+        // Initializing array / matrizes
+        initialize();
+        // Start Dijkstra Algorithm
+        prim(startNode);
+        // Print the output
+        print(nodeNames);
+    }
 }
