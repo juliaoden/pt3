@@ -12,23 +12,38 @@ public class Prim {
     static int n; // Number of nodes
 
     static int wayLength = 0;
+    int parentNode = 0;
 
     static ArrayList<Integer> visitedNodes = new ArrayList(); // Serie of nodes
+
+    static int[][] output;
 
     static ArrayList<Integer>[] graphArray; // Adjacency matrix
     static Boolean[] visited; // Visited Array
 
-    public void setMaxInt(ArrayList<Integer>[] graph) {
-        for (int i = 0; i < graph.length; i++) {
-            for (int j = 0; j < graph.length; j++) {
-                if (graph[i].get(j) == 0) {
-                    graph[i].set(j, Integer.MAX_VALUE);
+    public void initialize() {
+        // initializing graph array
+        for (int i = 0; i < graphArray.length; i++) {
+            for (int j = 0; j < graphArray.length; j++) {
+                if (graphArray[i].get(j) == 0) {
+                    graphArray[i].set(j, Integer.MAX_VALUE);
                 }
+            }
+        }
+        // initializing visited array
+        for (int i = 0; i < n; i++) {
+            visited[i] = false;
+        }
+
+        // initializing output array
+        for (int i = 0; i < n; i++) {
+            for (int j = 0;  j < n; j++){
+                output[i][j] = 0;
             }
         }
     }
 
-    public void prim(int start) {
+    public int[][] prim(int start) {
         int nextNode;
         // Current node is marked as visited
         visited[start] = true;
@@ -39,53 +54,58 @@ public class Prim {
             // Marking next node as visited
             if (nextNode != -1) visited[nextNode] = true;
             // Add next node to path of nodes
-            if (!visitedNodes.contains(nextNode)) visitedNodes.add(nextNode);
-
+            //visitedNodes.add(parentNode);
+            //System.out.println("Parent node: " +parentNode + " Next node: " + nextNode);
+            output[parentNode][nextNode] = 1;
+            output[nextNode][parentNode] = 1;
+            visitedNodes.add(nextNode);
         }
-
+        return output;
     }
 
 
     public int getNextVertex() {
         int curWeight, bestNode = -1, bestWeight = Integer.MAX_VALUE;
-        for (int i = 0; i < visitedNodes.toArray().length; i++) {
+        for (int i = 0; i < visitedNodes.size(); i++) {
             for (int curNode = 0; curNode < graphArray.length; curNode++) {
                 curWeight = graphArray[visitedNodes.get(i)].get(curNode); // current weight
                 // Check if current weight is less than best weight and if it isn´t already visited
-                if ((curWeight < bestWeight) && !visited[curNode]) {
+                if ((curWeight < bestWeight) && !visited[curNode] && !isFull(curNode)) {
                     // best node is the current node
+                    parentNode = visitedNodes.get(i);
                     bestNode = curNode;
                     bestWeight = curWeight;
 
                 }
             }
         }
-        // the current node is the penultimate node
-        /*if(bestNode == currentNode){
-            // TODO: Was passiert, wenn letzter nicht besuchter Knoten keine Verbindung zum derzeitigen Knoten hat?
-            int indexOfLastNode = java.util.Arrays.asList(visited).indexOf(Boolean.FALSE);
-            // adding node value to length
-            if(indexOfLastNode != -1) wayLength += graphArray[currentNode].get(indexOfLastNode);
-            // find the node which isn´t already visited
-            return indexOfLastNode;
-        } else{*/
         // adding node value to length
         wayLength += bestWeight;
         return bestNode;
         //}
     }
 
-    public void start(ArrayList<Integer>[] graph, int numNodes) {
+    public boolean isFull(int curNode){
+        int count = 0;
+        boolean isFull = false;
+        for (int i = 0; i < output.length; i++){
+            if(output[curNode][i] > 0){
+                count++;
+            }
+        }
+        if (count >= 5) isFull = true;
+        return isFull;
+    }
+
+    public void start(ArrayList<Integer>[] graph, int numNodes, int startNode) {
         n = numNodes;
         graphArray = graph;
         visited = new Boolean[graphArray.length];
+        output = new int[numNodes][numNodes];
 
-        // initializing vistied array
-        for (int i = 0; i < n; i++) {
-            visited[i] = false;
-        }
 
-        // TODO: Vom Nutzenden eingeben lassen
+
+        //
         /*
         //
         graphArray[0].add(0);
@@ -200,16 +220,26 @@ public class Prim {
         */
 
 
-        // Replace all zeros with MAX_INT
-        setMaxInt(graphArray);
+        // Initializing array / matrizes
+        initialize();
         // Start Dijkstra Algorithm
-        prim(0);
+        int[][] output = prim(startNode);
 
-        System.out.print("Reihenfolge der Häuser ist ");
+        System.out.print("Reihenfolge der Häuser ist \n");
         for (Integer visitedNode : visitedNodes) {
             System.out.print(visitedNode);
         }
-        System.out.printf("%n Length of visited nodes %d%n", wayLength);
+        System.out.println();
+
+        for(int i = 0; 0 < output.length; i++){
+
+            for(int j=0; j< output.length; j++){
+                System.out.print(output[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        //System.out.printf("%n Length of visited nodes %d%n", wayLength);
 
     }
 

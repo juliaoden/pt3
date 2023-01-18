@@ -119,15 +119,15 @@ public class Main {
                 break;
             // Problem: Wasserversorgung
             case 2:
-                source = 8;
-                destination=7;
+                source = 0;
+                destination= 8;
                 MaxFlow_Ford_Fulkerson ff1 = new MaxFlow_Ford_Fulkerson();
                 ff1.start(matrix, numNodes, source, destination);
                 break;
             // Problem: Stromversorgung
             case 3:
                 Prim p =  new Prim();
-                p.start(matrix, numNodes);
+                p.start(matrix, numNodes, 0);
                 break;
             // Problem: Historische Funde
             case 4:
