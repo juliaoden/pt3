@@ -5,54 +5,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+// TODO: println() entweder in deutsch oder englisch
+
 public class Main {
-
-   /* public static ArrayList<Integer>[] getArrayListMatrix(Scanner input, int numberNodes) {
-        // Adjacency matrix
-        System.out.println("Geben Sie Adjazenzmatrix ein");
-        int[] array = new int[numberNodes];
-        ArrayList<Integer>[] graphArray = new ArrayList[numberNodes];
-        for (int i = 0; i < numberNodes; i++) {
-            graphArray[i] = new ArrayList<>();
-        }
-        for (int i = 0; i < numberNodes; i++) {
-            for (int j = 0; j < numberNodes; j++) {
-                array[j] = input.nextInt();
-            }
-            for (int j = 0; j < array.length; j++) {
-                graphArray[i].add(array[j]);
-            }
-        }
-        return graphArray;
-    }
-
-    public static int[][] getMatrix(Scanner input, int numberNodes) {
-        // Adjacency matrix
-        System.out.println("Geben Sie Adjazenzmatrix ein");
-        int[][] graph = new int[numberNodes][numberNodes];
-        for (int i = 0; i < numberNodes; i++) {
-            for (int j = 0; j < numberNodes; j++) {
-                graph[i][j] = input.nextInt();
-            }
-
-        }
-        return graph;
-    }
-
-    public static String[] getStringArray(Scanner input, int numberNodes, boolean isNamesArray) {
-        String[] names = new String[numberNodes];
-        if(isNamesArray == true) names[0] = input.nextLine();
-        for (int i = 0; i < names.length; i++) {
-            names[i] = input.nextLine();
-        }
-        System.out.println(Arrays.toString(names));
-        return names;
-    }
-
-    */
+    static Scanner input = new Scanner(System.in);
+    static int problem;
+    static  int numNodes;
+    static  String filePath;
+    static List<String> inputRows;
+    static ArrayList<String> nodeNamesHorizontal;
+    static ArrayList<String> nodeNamesVertical= new ArrayList<>();
+    static ArrayList<Integer>[] matrix;
+    static int[][] output;
 
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+        // Get the problem, which should be solved
         System.out.print("Welches Problem der Grafschaft Schilda wollen Sie angehen? \n"
                 + "1: Straßen müssen her \n"
                 + "2: Wasserversorgung \n"
@@ -63,100 +30,134 @@ public class Main {
                 + "7: Es gibt viel zu tun! Wer macht‘s? \n"
                 + "Geben Sie die Nummer des gewünschten Problems ein! \n"
         );
-        int problem = input.nextInt();
+        problem = input.nextInt();
 
+        //Get number of nodes
         System.out.println("Geben Sie die Anzahl der Knoten ein:");
-        int numNodes = input.nextInt();
+        numNodes = input.nextInt();
 
-
+        // Get path name
         System.out.println("Geben Sie den Namen der Datei ein:");
+        filePath = input.next();
 
-        String filePath = input.next();
-        List<String> lines;
-
+        // Get rows from input
         try {
-            lines = Files.readAllLines(Path.of(filePath));
+            inputRows = Files.readAllLines(Path.of(filePath));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         // Get node names
-        String strNew = lines.get(0).replace("  ", "");
-        ArrayList<String> nodeNames = new ArrayList<>(Arrays.asList(strNew.split(" ")));
+        String strNew = inputRows.get(0).replace("  ", "");
+        nodeNamesHorizontal = new ArrayList<>(Arrays.asList(strNew.split(" ")));
 
-        ArrayList<Integer>[] matrix = new ArrayList[numNodes];
-
+        matrix = new ArrayList[numNodes];
         // Initialize matrix
         for (int i = 0; i < numNodes; i++) {
             matrix[i] = new ArrayList<>();
         }
 
         for (int i = 0; i < numNodes; i++) {
-            String target = nodeNames.get(i) + " ";
-            // Remove node name from string
-            String numberString = lines.get(i + 1).replace(target, "");
-            // Convert single lines from input to ArrayList
-            ArrayList<String> line = new ArrayList<>(Arrays.asList(numberString.split(" ")));
-            // Convert ArrayList to Integer array
+            ArrayList<String> line = new ArrayList<>(Arrays.asList(inputRows.get(i+1).split(" ")));
+            // Get node name from begin of each line and push to vertical node name ArrayList
+            nodeNamesVertical.add(line.remove(0));
+            // Push ArrayList<String> to ArrayList<Integer>[]
             int[] arr = line.stream().mapToInt(j -> Integer.parseInt(j)).toArray();
-            //
             for (int k = 0; k < numNodes; k++) {
                 matrix[i].add(arr[k]);
             }
 
-        }
 
-        // TODO: Von Nutzer abfragen
-        int source = 0;
-        int destination = 0;
-        int startNode = 0;
+
+        }
 
         switch (problem) {
             // Problem: Straßen müssen her
             case 1:
-                Dijkstra d2 = new Dijkstra();
-                d2.start(matrix, numNodes, 0);
+               startDijkstra();
                 break;
             // Problem: Wasserversorgung
             case 2:
-                source = 0;
-                destination= 8;
-                MaxFlow_Ford_Fulkerson ff1 = new MaxFlow_Ford_Fulkerson();
-                ff1.start(matrix, numNodes, source, destination);
+                startFordFulkerson();
                 break;
             // Problem: Stromversorgung
             case 3:
-                Prim p =  new Prim();
-                p.start(matrix, numNodes, 0, nodeNames);
+                startPrim();
                 break;
             // Problem: Historische Funde
             case 4:
-                Dijkstra d = new Dijkstra();
-                d.start(matrix, numNodes, 0);
+                startDijkstra();
                 break;
             // Problem: Die Festhochzeit – das Verteilen der Einladungen
             case 5:
-                Hierholzer_Euler h = new Hierholzer_Euler();
-               List<Integer> result =  h.findTour(matrix, numNodes);
-                System.out.println(result);
+                startEuler();
                 break;
             // Problem: Wohin nur mit den Gästen?
             case 6:
-                source=0;
-                destination = 5;
-                MaxFlow_Ford_Fulkerson ff2 = new MaxFlow_Ford_Fulkerson();
-                ff2.start(matrix, numNodes, source, destination);
+                startFordFulkerson();
                 break;
             // Problem: Es gibt viel zu tun! Wer macht's?
             case 7:
-                System.out.println("Geben Sie die Namen der Personen ein");
-                String[] names = nodeNames.toArray(new String[0]);
-                System.out.println("Geben Sie die Jobbezeichnungen ein");
-                String[] jobs = nodeNames.toArray(new String[1]);
-                MaximumBipartiteMatching m = new MaximumBipartiteMatching();
-                m.start(numNodes, names, jobs, matrix);
+                startBipartiteMatching();
                 break;
         }
 
+        printOutput();
+
+    }
+
+    // Methods for starting the algorithms
+    public static void startFordFulkerson(){
+        System.out.println("Enter source node (node indizes start at 0) \n");
+        int source = input.nextInt();
+        System.out.println("Enter destination node (node indizes start at 0) \n");
+        int destination= input.nextInt();
+        MaxFlow_Ford_Fulkerson ff1 = new MaxFlow_Ford_Fulkerson();
+        ff1.start(matrix, numNodes, source, destination);
+    }
+
+    public static void startDijkstra(){
+        System.out.println("Enter start node (node indizes start at 0)");
+        int startNode = input.nextInt();
+        Dijkstra d = new Dijkstra();
+        output = d.start(matrix, numNodes, startNode);
+    }
+
+    public static void startBipartiteMatching(){
+        String[] names = nodeNamesHorizontal.toArray(new String[0]);
+        String[] jobs = nodeNamesVertical.toArray(new String[1]);
+        MaximumBipartiteMatching m = new MaximumBipartiteMatching();
+        output = m.start(numNodes, names, jobs, matrix);
+    }
+
+    public static void startPrim(){
+        Prim p =  new Prim();
+        output = p.start(matrix, numNodes, 0, nodeNamesHorizontal);
+    }
+
+    public static void startEuler(){
+        Hierholzer_Euler h = new Hierholzer_Euler();
+        output =  h.start(matrix, numNodes);
+    }
+
+    public static void printOutput(){
+        System.out.print("Ausgabe Matrix:\n  ");
+        // Printing first line with node names
+        for(int i = 0; i < nodeNamesHorizontal.size(); i++){
+            System.out.print(nodeNamesHorizontal.get(i) + " ");
+        }
+
+        System.out.println();
+
+        // Printing the rest of the matrix
+        for(int i = 0; i < output.length; i++){
+            // Printing the node name and one space
+            System.out.print(nodeNamesVertical.get(i) + " ");
+            for(int j=0; j< output.length; j++){
+                // Printing the values of the matrix with a space
+                System.out.print(output[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }

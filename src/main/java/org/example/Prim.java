@@ -53,9 +53,6 @@ public class Prim {
             if (nextNode != -1) visited[nextNode] = true;
             // Adding next node to path of nodes
             visitedNodes.add(nextNode);
-            // Adding the way to the output array
-            output[parentNode][nextNode] = 1;
-            output[nextNode][parentNode] = 1;
         }
     }
 
@@ -79,6 +76,10 @@ public class Prim {
         }
         // adding the best weight to the length
         wayLength += bestWeight;
+        // Adding the way to the output array
+        output[parentNode][bestNode] = bestWeight;
+        output[bestNode][parentNode] = bestWeight;
+
         return bestNode;
         //}
     }
@@ -99,30 +100,7 @@ public class Prim {
         return isFull;
     }
 
-    public void print(ArrayList<String> nodeNames){
-        System.out.print("Reihenfolge der Häuser ist \n  ");
-
-        // Printing first line with node names
-        for(int i = 0; i < nodeNames.size(); i++){
-            System.out.print(nodeNames.get(i) + " ");
-        }
-
-        System.out.println();
-
-        // Printing the rest of the matrix
-        for(int i = 0; i < output.length; i++){
-            // Printing the node name and one space
-            System.out.print(nodeNames.get(i) + " ");
-            for(int j=0; j< output.length; j++){
-                // Printing the values of the matrix with a space
-                System.out.print(output[i][j] + " ");
-            }
-            System.out.println();
-        }
-        System.out.printf("Length of visited nodes %d%n", wayLength);
-    }
-
-    public void start(ArrayList<Integer>[] graph, int numNodes, int startNode, ArrayList<String> nodeNames) {
+    public int[][] start(ArrayList<Integer>[] graph, int numNodes, int startNode, ArrayList<String> nodeNames) {
         graphArray = graph;
         visited = new Boolean[graphArray.length];
         output = new int[numNodes][numNodes];
@@ -131,7 +109,9 @@ public class Prim {
         initialize();
         // Start Dijkstra Algorithm
         prim(startNode);
-        // Print the output
-        print(nodeNames);
+
+        System.out.println("Gesamte Länge ist: " + wayLength);
+
+        return output;
     }
 }
