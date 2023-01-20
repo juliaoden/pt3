@@ -5,8 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-// TODO: println() entweder in deutsch oder englisch
-
 public class Main {
     // scanner for getting user input
     static Scanner input = new Scanner(System.in);
@@ -99,7 +97,7 @@ public class Main {
                 break;
             // Problem: Die Festhochzeit – das Verteilen der Einladungen
             case 5:
-                startEuler();
+                startHierholzer();
                 break;
             // Problem: Wohin nur mit den Gästen?
             case 6:
@@ -144,7 +142,7 @@ public class Main {
         output = p.start(matrix, numNodes, 0, nodeNamesHorizontal);
     }
 
-    public static void startEuler(){
+    public static void startHierholzer(){
         Hierholzer h = new Hierholzer();
         output =  h.start(matrix, numNodes);
     }
