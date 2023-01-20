@@ -39,10 +39,6 @@ public class Main {
         );
         problem = input.nextInt();
 
-        // get number of nodes
-        System.out.println("Enter number of nodes:");
-        numNodes = input.nextInt();
-
         // get path name
         System.out.println("Enter path of file (needs to be stored in the same folder as project):");
         filePath = input.next();
@@ -53,6 +49,9 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // get number of nodes
+        numNodes = inputRows.size()-1;
 
         // get node names
         String strNew = inputRows.get(0).replace("  ", "");
@@ -119,8 +118,8 @@ public class Main {
         int source = input.nextInt();
         System.out.println("Enter destination node (node indizes start at 0)");
         int destination= input.nextInt();
-        FordFulkerson ff1 = new FordFulkerson();
-        ff1.start(matrix, numNodes, source, destination);
+        FordFulkerson ff = new FordFulkerson();
+        output = ff.start(matrix, numNodes, source, destination);
     }
 
     public static void startDijkstra(){
@@ -133,7 +132,7 @@ public class Main {
     public static void startBipartiteMatching(){
         String[] names = nodeNamesHorizontal.toArray(new String[0]);
         String[] jobs = nodeNamesVertical.toArray(new String[1]);
-        MaximumBipartiteMatching m = new MaximumBipartiteMatching();
+        BipartiteMatching m = new BipartiteMatching();
         output = m.start(numNodes, names, jobs, matrix);
     }
 

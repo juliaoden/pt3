@@ -1,10 +1,8 @@
 package org.example;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
-public class MaximumBipartiteMatching {
+public class BipartiteMatching {
     // output matrix
     static int[][] output;
     // number of jobs
