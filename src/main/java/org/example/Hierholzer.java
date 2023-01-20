@@ -2,21 +2,25 @@ package org.example;
 
 import java.util.*;
 
-class Hierholzer_Euler {
-
+class Hierholzer {
+    // output matrix
     static int[][] output;
+    // graph matrix
     static ArrayList<Integer>[] adjacencyMatrix;
+    // number of nodes
     static int numNodes;
+    // tour list
     static List<Integer> tour = new ArrayList<>();
+    // set to check if graph is valid
     static Set<Integer> oddDegreeVertices = new HashSet<>();
 
     static void findTour() {
         int start;
         if (oddDegreeVertices.size() == 0) {
-            // Wähle beliebigen Knoten als Start
+            // choose random node as start
             start = 0;
         } else {
-            // Wähle Knoten mit ungeradem Grad als Start
+            // choose node with even degree as start
             start = oddDegreeVertices.iterator().next();
         }
         tour.add(start);
@@ -48,7 +52,6 @@ class Hierholzer_Euler {
                         break;
                     }
                 }
-
             }
             if (tourIsEuler) {
                 break;
@@ -75,7 +78,7 @@ class Hierholzer_Euler {
         }
         if (oddDegreeVertices.size() > 0) {
             // Graph ist ungültig
-            System.out.println("Error: Der Graph hat mehr als einen Knoten mit ungeradem Grad.");
+            System.out.println("Error: Graph has more than one node with odd degree, algorithm can´t proceed.");
             return false;
         }
         return true;

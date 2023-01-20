@@ -5,12 +5,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class MaximumBipartiteMatching {
+    // output matrix
     static int[][] output;
+    // number of jobs
     static int jobs;
+    // number of applicants
     static int applicants;
+    // graph matrix
     static ArrayList<Integer>[] adjMatrix;
-
+    // array for job names
     static String[] job;
+    // array for name names
     static String[] namen;
 
 
@@ -30,7 +35,7 @@ public class MaximumBipartiteMatching {
             bipartiteMatch(applicant, visited, assign);
         }
 
-        // output
+        // update output matrix
         for(int i = 0; i < namen.length; i++){
             for(int j= 0; j< job.length; j++){
                 if(i == assign[j])
@@ -52,7 +57,7 @@ public class MaximumBipartiteMatching {
                 // make recursive call for other applicant to check if some other job can be assigned
                 // so that this job can be assigned to current candidate
                 if (assignedApplicant < 0 || bipartiteMatch(assignedApplicant, visited, assign)) {
-                    //assign job to applicant
+                    // assign job to applicant
                     assign[job] = applicant;
                     return true;
                 }

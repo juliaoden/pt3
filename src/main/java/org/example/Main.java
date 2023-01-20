@@ -8,19 +8,28 @@ import java.util.*;
 // TODO: println() entweder in deutsch oder englisch
 
 public class Main {
+    // scanner for getting user input
     static Scanner input = new Scanner(System.in);
+    // number of problem
     static int problem;
+    // number of nodes
     static  int numNodes;
+    // path of file
     static  String filePath;
+    // rows of inut file
     static List<String> inputRows;
+    // first line of nodes
     static ArrayList<String> nodeNamesHorizontal;
+    // node names from first column
     static ArrayList<String> nodeNamesVertical= new ArrayList<>();
+    // matrix for algorithm
     static ArrayList<Integer>[] matrix;
+    // output graph
     static int[][] output;
 
     public static void main(String[] args) {
-        // Get the problem, which should be solved
-        System.out.print("Welches Problem der Grafschaft Schilda wollen Sie angehen? \n"
+        // get the problem, which should be solved
+        System.out.print("Which problem should be solved? \n"
                 + "1: Straßen müssen her \n"
                 + "2: Wasserversorgung \n"
                 + "3: Stromversorgung \n"
@@ -28,40 +37,40 @@ public class Main {
                 + "5: Die Festhochzeit – das Verteilen der Einladungen \n"
                 + "6: Wohin nur mit den Gästen? \n"
                 + "7: Es gibt viel zu tun! Wer macht‘s? \n"
-                + "Geben Sie die Nummer des gewünschten Problems ein! \n"
+                + "Enter number of the problem! \n"
         );
         problem = input.nextInt();
 
-        //Get number of nodes
-        System.out.println("Geben Sie die Anzahl der Knoten ein:");
+        // get number of nodes
+        System.out.println("Enter number of nodes:");
         numNodes = input.nextInt();
 
-        // Get path name
-        System.out.println("Geben Sie den Namen der Datei ein:");
+        // get path name
+        System.out.println("Enter path of file (needs to be stored in the same folder as project):");
         filePath = input.next();
 
-        // Get rows from input
+        // get rows from input
         try {
             inputRows = Files.readAllLines(Path.of(filePath));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        // Get node names
+        // get node names
         String strNew = inputRows.get(0).replace("  ", "");
         nodeNamesHorizontal = new ArrayList<>(Arrays.asList(strNew.split(" ")));
 
         matrix = new ArrayList[numNodes];
-        // Initialize matrix
+        // initialize matrix
         for (int i = 0; i < numNodes; i++) {
             matrix[i] = new ArrayList<>();
         }
 
         for (int i = 0; i < numNodes; i++) {
             ArrayList<String> line = new ArrayList<>(Arrays.asList(inputRows.get(i+1).split(" ")));
-            // Get node name from begin of each line and push to vertical node name ArrayList
+            // get node name from begin of each line and push to vertical node name ArrayList
             nodeNamesVertical.add(line.remove(0));
-            // Push ArrayList<String> to ArrayList<Integer>[]
+            // push ArrayList<String> to ArrayList<Integer>[]
             int[] arr = line.stream().mapToInt(j -> Integer.parseInt(j)).toArray();
             for (int k = 0; k < numNodes; k++) {
                 matrix[i].add(arr[k]);
@@ -106,13 +115,13 @@ public class Main {
 
     }
 
-    // Methods for starting the algorithms
+    // methods for starting the algorithms
     public static void startFordFulkerson(){
-        System.out.println("Enter source node (node indizes start at 0) \n");
+        System.out.println("Enter source node (node indizes start at 0)");
         int source = input.nextInt();
-        System.out.println("Enter destination node (node indizes start at 0) \n");
+        System.out.println("Enter destination node (node indizes start at 0)");
         int destination= input.nextInt();
-        MaxFlow_Ford_Fulkerson ff1 = new MaxFlow_Ford_Fulkerson();
+        FordFulkerson ff1 = new FordFulkerson();
         ff1.start(matrix, numNodes, source, destination);
     }
 
@@ -136,25 +145,25 @@ public class Main {
     }
 
     public static void startEuler(){
-        Hierholzer_Euler h = new Hierholzer_Euler();
+        Hierholzer h = new Hierholzer();
         output =  h.start(matrix, numNodes);
     }
 
     public static void printOutput(){
-        System.out.print("Ausgabe Matrix:\n  ");
-        // Printing first line with node names
+        System.out.print("Output Matrix:\n  ");
+        // printing first line with node names
         for(int i = 0; i < nodeNamesHorizontal.size(); i++){
             System.out.print(nodeNamesHorizontal.get(i) + " ");
         }
 
         System.out.println();
 
-        // Printing the rest of the matrix
+        // printing the rest of the matrix
         for(int i = 0; i < output.length; i++){
-            // Printing the node name and one space
+            // printing the node name and one space
             System.out.print(nodeNamesVertical.get(i) + " ");
             for(int j=0; j< output.length; j++){
-                // Printing the values of the matrix with a space
+                // printing the values of the matrix with a space
                 System.out.print(output[i][j] + " ");
             }
             System.out.println();

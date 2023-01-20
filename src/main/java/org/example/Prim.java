@@ -8,15 +8,21 @@ package org.example;
 import java.util.*;
 
 public class Prim {
-    static int wayLength = 0; // Length of all the cables
-    int parentNode = 0; // Starting point of one cable
-    static ArrayList<Integer> visitedNodes = new ArrayList(); // Stack of visited nodes
-    static int[][] output;// matrix which get´s returned
-    static ArrayList<Integer>[] graphArray; // Graph matrix
-    static Boolean[] visited; // Visited array
+    // length of all the cables
+    static int wayLength = 0;
+    // starting point of one cable
+    int parentNode = 0;
+    // stack of visited nodes
+    static ArrayList<Integer> visitedNodes = new ArrayList();
+    // matrix which get´s returned
+    static int[][] output;
+    // graph matrix
+    static ArrayList<Integer>[] graphArray;
+    // visited array
+    static Boolean[] visited;
 
 
-    // Method to initialize all necessary arrays
+    // method to initialize all necessary arrays
     public void initialize() {
         // initializing graph array
         for (int i = 0; i < graphArray.length; i++) {
@@ -42,52 +48,51 @@ public class Prim {
 
     public void prim(int start) {
         int nextNode;
-        // Current node is marked as visited
+        // current node is marked as visited
         visited[start] = true;
-        // Adding start node to visited node stack
+        // adding start node to visited node stack
         visitedNodes.add(start);
         for (int i = 0; i < graphArray.length - 1; i++) {
-            // Searching for next node
+            // searching for next node
             nextNode = getNextVertex();
-            // Marking next node as visited
+            // marking next node as visited
             if (nextNode != -1) visited[nextNode] = true;
-            // Adding next node to path of nodes
+            // adding next node to path of nodes
             visitedNodes.add(nextNode);
         }
     }
 
-    // Method for finding next cheapest node
+    // method for finding next cheapest node
     public int getNextVertex() {
         int curWeight, bestNode = -1, bestWeight = Integer.MAX_VALUE;
         for (int i = 0; i < visitedNodes.size(); i++) {
             for (int curNode = 0; curNode < graphArray.length; curNode++) {
                 // current weight
                 curWeight = graphArray[visitedNodes.get(i)].get(curNode);
-                // Check if current weight is less than best weight, if it isn´t already visited and if there are less than 6 connections
+                // check if current weight is less than best weight, if it isn´t already visited and if there are less than 6 connections
                 if ((curWeight < bestWeight) && !visited[curNode] && !isFull(curNode)) {
-                    // Setting parent node as current node from stack
+                    // setting parent node as current node from stack
                     parentNode = visitedNodes.get(i);
-                    // Best node is the current node
+                    // best node is the current node
                     bestNode = curNode;
-                    // Best weight is the current weight
+                    // best weight is the current weight
                     bestWeight = curWeight;
                 }
             }
         }
         // adding the best weight to the length
         wayLength += bestWeight;
-        // Adding the way to the output array
+        // adding the way to the output array
         output[parentNode][bestNode] = bestWeight;
         output[bestNode][parentNode] = bestWeight;
 
         return bestNode;
-        //}
     }
 
-    // Method for checking if the node is connected to more than 5 other nodes
+    // method for checking if the node is connected to more than 5 other nodes
     public boolean isFull(int curNode){
         int count = 0;
-        // Initially the node isn´t connected to more than 5 nodes
+        // initially the node isn´t connected to more than 5 nodes
         boolean isFull = false;
         for (int i = 0; i < output.length; i++){
             if(output[curNode][i] == 1){
@@ -95,7 +100,7 @@ public class Prim {
                 count++;
             }
         }
-        // Node is connected to more than 5 nodes
+        // node is connected to more than 5 nodes
         if (count >= 5) isFull = true;
         return isFull;
     }
@@ -104,13 +109,10 @@ public class Prim {
         graphArray = graph;
         visited = new Boolean[graphArray.length];
         output = new int[numNodes][numNodes];
-
-        // Initializing array / matrizes
         initialize();
-        // Start Dijkstra Algorithm
         prim(startNode);
 
-        System.out.println("Gesamte Länge ist: " + wayLength);
+        System.out.println("Total length is: " + wayLength);
 
         return output;
     }

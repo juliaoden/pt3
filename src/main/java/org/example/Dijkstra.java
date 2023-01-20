@@ -4,80 +4,73 @@ import java.util.*;
 import java.lang.*;
 
 class Dijkstra {
-    //max number of vertices in graph
-    int num_Vertices ;
-    // The output array dist[i] will hold
-    int[] path_array;
-    // spt (shortest path set) contains vertices that have shortest path
-    Boolean[] sptSet;
+    // max number of nodes in graph
+    int numNodes ;
+    //  array which holds weights
+    int[] pathArray;
+    // array for visited nodes, which have the shortest path
+    Boolean[] visitedArray;
     // row = parent node, column = destination node, output[row][col] = total weight to get there
     int[][] output;
 
-    void printMinpath(int[] path_array)   {
-        System.out.println("Vertex \t Minimum Distance from Source");
-        for (int i = 0; i < num_Vertices; i++)
-            System.out.println(i + " \t\t\t " + path_array[i]);
-    }
-
     public void initialize(){
-        // Initially all the distances are INFINITE and stpSet[] is set to false
-        for (int i = 0; i < num_Vertices; i++) {
-            path_array[i] = Integer.MAX_VALUE;
-            sptSet[i] = false;
+        // initially all the distances are INFINITE and no nodes have the shortest path
+        for (int i = 0; i < numNodes; i++) {
+            pathArray[i] = Integer.MAX_VALUE;
+            visitedArray[i] = false;
         }
     }
 
-    int minDistance(int[] path_array, Boolean[] sptSet)   {
-        // Initialize min value
+    int minDistance()   {
+        // initialize min value
         int min = Integer.MAX_VALUE, min_index = -1;
-        for (int v = 0; v < num_Vertices; v++)
-            if (!sptSet[v] && path_array[v] <= min) {
-                min = path_array[v];
-                min_index = v;
+        for (int i = 0; i < numNodes; i++)
+            // if node isn´t visited and if it´s weight is better
+            if (!visitedArray[i] && pathArray[i] <= min) {
+                min = pathArray[i];
+                min_index = i;
             }
         return min_index;
     }
 
-    void algo_dijkstra(ArrayList<Integer>[] graph, int src_node)  {
-        // Path between vertex and itself is always 0 
-        path_array[src_node] = 0;
-        // now find the shortest path for each vertices
-        for (int count = 0; count < num_Vertices - 1; count++) {
-            // call minDistance method to find the vertex with min distance
-            int shortestVertex = minDistance(path_array, sptSet);
-            // the current vertex shortestVertex is marked as visited
-            sptSet[shortestVertex] = true;
+    void dijkstra(ArrayList<Integer>[] graph, int src_node)  {
+        // path between node and itself is always 0
+        pathArray[src_node] = 0;
+        // find the shortest path for each node
+        for (int i = 0; i < numNodes - 1; i++) {
+            // find the node with minimum distance
+            int shortestNode = minDistance();
+            // the current node is marked as visited
+            visitedArray[shortestNode] = true;
 
-            for (int i = 0; i < num_Vertices; i++)
+            for (int j = 0; j < numNodes; j++)
                 if (
-                    //vertex isn´t visited
-                    !sptSet[i]
-                    // edge to vertex is existing
-                    && graph[shortestVertex].get(i) != 0
-                    // TODO: Was wird hier abgefragt
-                    && path_array[shortestVertex] != Integer.MAX_VALUE
+                    // node isn´t visited
+                    !visitedArray[j]
+                    // edge to node is existing
+                    && graph[shortestNode].get(j) != 0
+                    // connection is existing
+                    && pathArray[shortestNode] != Integer.MAX_VALUE
                     // new edge is less than current edge
-                    && path_array[shortestVertex] + graph[shortestVertex].get(i) < path_array[i]) {
-                    // update path_array with new total weight for node
-                    path_array[i] = path_array[shortestVertex] + graph[shortestVertex].get(i);
+                    && pathArray[shortestNode] + graph[shortestNode].get(j) < pathArray[j]) {
+                    // update pathArray with new total weight for node
+                    pathArray[j] = pathArray[shortestNode] + graph[shortestNode].get(j);
                     // add to output array
-                    // shortestVertex = parent node, i = destination, path_array[i] contains needed value
-                    output[shortestVertex][i] = path_array[i];
+                    // shortestNode = parent node, j = destination, path_array[j] contains needed value
+                    output[shortestNode][j] = pathArray[j];
                 }
 
             }
-        // print the path array
-        printMinpath(path_array);
     }
 
 
     public int[][] start(ArrayList<Integer>[] graph, int numModes, int startNode) {
-        num_Vertices = numModes;
-        path_array = new int[num_Vertices];
-        sptSet = new Boolean[num_Vertices];
-        output = new int[num_Vertices][num_Vertices];
+        numNodes = numModes;
+        pathArray = new int[numNodes];
+        visitedArray = new Boolean[numNodes];
+        output = new int[numNodes][numNodes];
         initialize();
-        algo_dijkstra(graph, startNode);
+        dijkstra(graph, startNode);
 
         return output;
     }
